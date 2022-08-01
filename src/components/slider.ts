@@ -179,7 +179,7 @@ export class Slider extends ViewElement {
         public refresh(context: Context, assets: AssetContainer, options: ViewElementOptions) {
                 super.refresh(context, assets, options);
                 const scale = this._asset.transform.local.scale;
-                this.underlay.transform.local.scale.copy(scale);
+                this.underlay?.transform.local.scale.copy(scale);
                 return this;
         }
 }

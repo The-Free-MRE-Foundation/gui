@@ -43,7 +43,7 @@ export class View {
         public dom: DOMElement;
         public root: ViewElement;
 
-        get baseUrl(){
+        get baseUrl() {
                 return this.options.baseUrl;
         }
 
@@ -225,6 +225,9 @@ export class View {
                                         new Stock(this.context, this.assets, options as StockOptions);
                                 break;
                         default:
+                                options = Object.assign(options, {
+                                        hidden: dom.options.hidden,
+                                });
                                 element = dom.element ?
                                         dom.element.refresh(this.context, this.assets, options) :
                                         new ViewElement(this.context, this.assets, options);
@@ -241,6 +244,15 @@ export class View {
                 dom.element = element;
 
                 return dom.element;
+        }
+
+        public reattach() {
+                this.reattachHelper(this.root);
+        }
+
+        private reattachHelper(elem: ViewElement) {
+                elem.reattach();
+                elem.children.forEach(e=>e.reattach());
         }
 
         private notifyCreated(success: boolean) {

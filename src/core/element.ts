@@ -197,7 +197,7 @@ export class ViewElement {
 
     public handleUIEvent(event: string, param: any) {
         if (param.user && this.options.roles) {
-            if (!this.options.roles.every(r=>checkUserRole(param.user, r))) return;
+            if (!this.options.roles.every(r => checkUserRole(param.user, r))) return;
         }
         const handlers = this.handlers.get(event);
         handlers?.forEach(handler => {
@@ -246,7 +246,8 @@ export class ViewElement {
 
         if (!selector) {
             elements.push(root);
-            return;
+            // return;
+            selector = first;
         }
 
         root.children?.forEach(child => {
@@ -318,5 +319,8 @@ export class ViewElement {
     public render() {
         this.dom.calc();
         this.view.render();
+    }
+
+    public reattach() {
     }
 }

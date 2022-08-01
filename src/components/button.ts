@@ -44,25 +44,7 @@ export class Button extends ViewElement {
                         'hover-released': ['user', 'id'],
                 }
 
-                // behavior
-                const buttonBehavior = this.anchor.setBehavior(ButtonBehavior);
-                // on click
-                buttonBehavior.onClick((user, _) => {
-                        this.handleUIEvent('click', { user, id: this.id });
-                });
-                // on button
-                ['pressed', 'holding', 'released'].forEach(event => {
-                        buttonBehavior.onButton(event as ButtonState, (user, _) => {
-                                this.handleUIEvent(event, { user, id: this.id });
-                        });
-                });
-                // on hover
-                ['hover-enter', 'hover-exit'].forEach(event => {
-                        const e = event.split('-')[1];
-                        buttonBehavior.onHover(e as HoverState, (user, _) => {
-                                this.handleUIEvent(event, { user, id: this.id });
-                        });
-                });
+                this.setButtonBehavior();
 
                 if (options.stylus) {
                         this.anchor.collider.isTrigger = true;
@@ -205,5 +187,31 @@ export class Button extends ViewElement {
                 } else {
                         return this.dom.value;
                 }
+        }
+
+        private setButtonBehavior() {
+                // behavior
+                const buttonBehavior = this.anchor.setBehavior(ButtonBehavior);
+                // on click
+                buttonBehavior.onClick((user, _) => {
+                        this.handleUIEvent('click', { user, id: this.id });
+                });
+                // on button
+                ['pressed', 'holding', 'released'].forEach(event => {
+                        buttonBehavior.onButton(event as ButtonState, (user, _) => {
+                                this.handleUIEvent(event, { user, id: this.id });
+                        });
+                });
+                // on hover
+                ['hover-enter', 'hover-exit'].forEach(event => {
+                        const e = event.split('-')[1];
+                        buttonBehavior.onHover(e as HoverState, (user, _) => {
+                                this.handleUIEvent(event, { user, id: this.id });
+                        });
+                });
+        }
+
+        public reattach() {
+                this.setButtonBehavior();
         }
 }
