@@ -169,7 +169,7 @@ export class Button extends ViewElement {
                         }
                         let mn = `material_${img.url}`;
                         let material = this.assets.materials.find(m => m.name === mn);
-                        if (!texture) {
+                        if (!material) {
                                 material = this.assets.createMaterial(mn, {
                                         emissiveColor: Color3.White(), emissiveTextureId: texture.id,
                                         color: Color3.White(), mainTextureId: texture.id,
