@@ -1,6 +1,6 @@
 import { ScaledTransformLike, Vector3Like } from "@microsoft/mixed-reality-extension-sdk";
 import yoga, { YogaNode } from 'yoga-layout-prebuilt';
-import cheerio from 'cheerio';
+const cheerio = require('cheerio');
 import { ViewElement } from "./element";
 
 export const PixelsToMeters = 0.01;
@@ -83,7 +83,7 @@ export class DOMElement {
                 if (!text) { return; }
                 let obj: { [selector: string]: any }[] = [];
                 const matches = text.match(/([^\{^\}]*)(\{[^\{^\}]*\})/g);
-                matches.forEach(m => {
+                matches.forEach((m: string) => {
                         const g = m.match(/([^\{^\}]*)\{([^\{^\}]*)\}/);
                         const [first, second] = [g[1], g[2]];
                         const style = this.parseStyle(second);
@@ -106,10 +106,10 @@ export class DOMElement {
                 return rootNode;
         }
 
-        private parseXMLHelper($: cheerio.Root, root: cheerio.Cheerio, dom: DOMElement) {
+        private parseXMLHelper($: any, root: any, dom: DOMElement) {
                 const node = yoga.Node.create();
 
-                dom.tag = (root[0] as cheerio.TagElement).name;
+                dom.tag = (root[0]).name;
                 dom.id = root.attr('id');
                 dom.class = root.attr('class');
                 dom.value = root.attr('value');
@@ -156,7 +156,7 @@ export class DOMElement {
                 if (root.attr('y')) node.setPosition(yoga.EDGE_BOTTOM, parseFloat(root.attr('y')));
 
                 // children
-                root.children().each((i: number, e: cheerio.Element) => {
+                root.children().each((i: number, e: any) => {
                         const child = $(e);
                         const childDom: DOMElement = new DOMElement();
                         const childNode = this.parseXMLHelper($, child, childDom);
