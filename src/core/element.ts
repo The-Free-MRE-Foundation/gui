@@ -8,6 +8,7 @@ export const DEFAULT_TEXT_HEIGHT = 0.03;
 export const DEFAULT_TEXT_ANCHOR = TextAnchorLocation.MiddleCenter;
 export const DEFAULT_TEXT_COLOR = Color3.White();
 export const DEFAULT_TEXT_JUSTIFY = "left";
+export const DEFAULT_TEXT_FONT = "default";
 
 export interface ViewElementOptions {
     view: View,

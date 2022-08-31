@@ -1,5 +1,5 @@
-import { Actor, AssetContainer, Context, TextJustify } from "@microsoft/mixed-reality-extension-sdk";
-import { DEFAULT_TEXT_ANCHOR, DEFAULT_TEXT_COLOR, DEFAULT_TEXT_HEIGHT, DEFAULT_TEXT_JUSTIFY, ViewElement, ViewElementOptions } from "../core/element";
+import { Actor, AssetContainer, Context, TextFontFamily, TextJustify } from "@microsoft/mixed-reality-extension-sdk";
+import { DEFAULT_TEXT_ANCHOR, DEFAULT_TEXT_COLOR, DEFAULT_TEXT_FONT, DEFAULT_TEXT_HEIGHT, DEFAULT_TEXT_JUSTIFY, ViewElement, ViewElementOptions } from "../core/element";
 import { parseHexColor } from "../helper";
 
 export interface TextOptions extends ViewElementOptions {
@@ -20,6 +20,7 @@ export class Text extends ViewElement {
                 const tx = this.dom ? (this.dom.options.tx ? this.dom.options.tx : 0) : 0;
                 const ty = this.dom ? (this.dom.options.ty ? this.dom.options.ty : 0) : 0;
                 const textColor = this.dom ? (this.dom.style.textColor ? parseHexColor(this.dom.style.textColor) : DEFAULT_TEXT_COLOR) : DEFAULT_TEXT_COLOR;
+                const textFont = this.dom ? (this.dom.style.textFont ? this.dom.style.textFont : DEFAULT_TEXT_FONT) : DEFAULT_TEXT_FONT;
                 textHeight = this.dom ? (this.dom.style.textHeight ? this.dom.style.textHeight : textHeight) : textHeight;
                 // text
                 this._text = Actor.Create(this.context, {
@@ -40,6 +41,7 @@ export class Text extends ViewElement {
                                         anchor: textAnchor,
                                         color: textColor,
                                         justify: textJustify as TextJustify,
+                                        font: textFont as TextFontFamily,
                                 }
                         }, this.options.exclusive ? { exclusiveToUser: this.options.owner.id } : {})
                 });
