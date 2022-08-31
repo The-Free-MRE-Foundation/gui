@@ -7,7 +7,6 @@
                 "build2": "npm run clean &&tsc --project ./tsconfig.json",
                 "build": "tsc --build",
                 "clean": "rimraf ./built",
-                "install": "npm install; npm run build",
                 "test": "node ."
         },
         "keywords": [],
