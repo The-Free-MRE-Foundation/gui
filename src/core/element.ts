@@ -41,6 +41,15 @@ export class ViewElement {
     set tag(t: string) { this.dom.tag = t; }
     set value(v: string) { this.dom.value = v; }
 
+    private _roles: string[] = null;
+    set roles(rl: string[]) {
+        this._roles = rl;
+    }
+
+    get roles() {
+        return this._roles;
+    }
+
     public owner: User;
     public stylus: Actor;
 
@@ -66,6 +75,8 @@ export class ViewElement {
 
         this.owner = options.owner;
         this.stylus = options.stylus;
+
+        this._roles = options.roles;
 
         this.handlers = new Map<string, ViewElementEventHandler[]>();
 
@@ -197,8 +208,8 @@ export class ViewElement {
     }
 
     public handleUIEvent(event: string, param: any) {
-        if (param.user && this.options.roles) {
-            if (!this.options.roles.every(r => checkUserRole(param.user, r))) return;
+        if (param.user && this.roles) {
+            if (!this.roles.every(r => checkUserRole(param.user, r))) return;
         }
         const handlers = this.handlers.get(event);
         handlers?.forEach(handler => {

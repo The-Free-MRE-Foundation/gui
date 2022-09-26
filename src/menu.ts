@@ -38,6 +38,10 @@ export class Menu {
                 return this._closed;
         }
 
+        set roles(rl: string[]) {
+                this.view.roles = rl;
+        }
+
         constructor(protected context: Context, protected assets: AssetContainer, protected options: MenuOptions, public owner: User, protected stylus: Actor = null) {
                 this.init();
         }

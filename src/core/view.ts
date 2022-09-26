@@ -47,6 +47,17 @@ export class View {
                 return this.options.baseUrl;
         }
 
+        set roles(rl: string[]){
+                this.setRoles(this.root, rl);
+        }
+
+        private setRoles(e: ViewElement, rl: string[]){
+                e.roles = rl;
+                e.children.forEach(x=>{
+                        this.setRoles(x, rl);
+                });
+        }
+
         constructor(private context: Context, private assets: AssetContainer, private options: ViewOptions) {
                 this.init();
         }
