@@ -14,6 +14,7 @@ import { Stock, StockOptions } from '../components/stock';
 import { NumberInput, NumberInputOptions } from '../components/number';
 import { fetchText } from '../helper';
 import { AssetData } from './style';
+import { Radial, RadialOptions } from '../components/radial';
 
 const fs = require('fs-extra');
 
@@ -234,6 +235,15 @@ export class View {
                                 element = dom.element ?
                                         dom.element.refresh(this.context, this.assets, options) :
                                         new Stock(this.context, this.assets, options as StockOptions);
+                                break;
+                        case 'Radial':
+                                options = Object.assign(options, {
+                                        camera: dom.options.camera,
+                                        input: dom.options.input,
+                                });
+                                element = dom.element ?
+                                        dom.element.refresh(this.context, this.assets, options) :
+                                        new Radial(this.context, this.assets, options as RadialOptions);
                                 break;
                         default:
                                 options = Object.assign(options, {
