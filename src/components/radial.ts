@@ -36,12 +36,12 @@ export class Radial extends ViewElement {
         const local = translate(options.camera.transform ? options.camera.transform : {}).toJSON();
         this.camera = Actor.CreateFromLibrary(this.context, {
             resourceId: (this.options as RadialOptions).camera.resourceId,
-            actor: {
+            actor: Object.assign({
                 parentId: this.anchor.id,
                 transform: {
                     local
                 }
-            }
+            }, this.options.exclusive ? { exclusiveToUser: this.options.owner.id } : {})
         });
     }
 
@@ -53,16 +53,17 @@ export class Radial extends ViewElement {
         if (!mesh) {
             mesh = this.assets.createBoxMesh('radial_input_mesh', dim.width, dim.height, dim.depth);
         }
-        let material = this.assets.materials.find(m => m.name === 'radial_input_material');
+        const name = `radial_input_material_${this.options.exclusive ? this.owner.id : ''}`;
+        let material = this.assets.materials.find(m => m.name === name);
         if (!material) {
-            material = this.assets.createMaterial('radial_input_material', {
+            material = this.assets.createMaterial(name, {
                 color: Color3.Black(),
                 emissiveColor: Color3.Black(),
             });
         }
 
         this.input = Actor.Create(this.context, {
-            actor: {
+            actor: Object.assign({
                 parentId: this.anchor.id,
                 appearance: {
                     meshId: mesh.id,
@@ -75,7 +76,7 @@ export class Radial extends ViewElement {
                     geometry: { shape: ColliderType.Box },
                     layer: CollisionLayer.Hologram
                 }
-            }
+            }, this.options.exclusive ? { exclusiveToUser: this.options.owner.id } : {})
         });
     }
 
