@@ -68,7 +68,7 @@ export class ViewElement {
     public eventParams: { [event: string]: string[] } = {};
     private handlers: Map<string, ViewElementEventHandler[]>;
 
-    constructor(protected context: Context, protected assets: AssetContainer, public options: ViewElementOptions) {
+    constructor(protected context: Context, public assets: AssetContainer, public options: ViewElementOptions) {
         this.dom = options.dom;
         this.view = options.view;
         this.parent = options.parent;

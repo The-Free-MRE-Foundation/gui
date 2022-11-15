@@ -171,13 +171,17 @@ export class Pager extends ViewElement {
         private select(id: string) {
                 if (this._selected && this._selected != id) {
                         const e = this.dots.find(`#${this._selected}`)[0];
-                        e.dom.style.asset = (this.options as PagerOptions).defaultAsset;
-                        e.refreshStyle();
+                        if (e) {
+                                e.dom.style.asset = (this.options as PagerOptions).defaultAsset;
+                                e.refreshStyle();
+                        }
                 }
                 this._selected = id;
                 const el = this.dots.find(`#${id}`)[0];
-                el.dom.style.asset = (this.options as PagerOptions).highlightAsset;
-                el.refreshStyle();
+                if (el) {
+                        el.dom.style.asset = (this.options as PagerOptions).highlightAsset;
+                        el.refreshStyle();
+                }
         }
 
         private scroll(page: string) {

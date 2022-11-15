@@ -14,6 +14,7 @@ export interface StockOptions extends ViewElementOptions {
         ymax: number,
         ymin: number,
         radius?: number,
+        bar?: boolean,
 }
 
 export class Stock extends ViewElement {
@@ -21,7 +22,7 @@ export class Stock extends ViewElement {
         get values() {
                 return this._values;
         }
-        private _assets: { [x: number]: string } = {};
+        public _assets: { [x: number]: string } = {};
 
         private colors: { [x: number]: Color3Like } = {};
 
@@ -111,13 +112,25 @@ export class Stock extends ViewElement {
                 const px = (-w / 2 + w * rx);
 
                 if (this._values[x] === undefined) {
+                        // mesh
                         const r = options.radius ? options.radius : DEFAULT_RADIUS;
-                        let name = `mesh_sphere_${r}`;
-                        let mesh = this.assets.meshes.find(m => m.name === name);
-                        if (!mesh) {
-                                mesh = this.assets.createSphereMesh(name, r);
+                        let name: string;
+                        let mesh;
+                        if (!(this.options as StockOptions).bar) {
+                                name = `mesh_sphere_${r}`;
+                                mesh = this.assets.meshes.find(m => m.name === name);
+                                if (!mesh) {
+                                        mesh = this.assets.createSphereMesh(name, r);
+                                }
+                        } else {
+                                name = `mesh_bar_${r}`;
+                                mesh = this.assets.meshes.find(m => m.name === name);
+                                if (!mesh) {
+                                        mesh = this.assets.createBoxMesh(name, r, 1, r);
+                                }
                         }
 
+                        // material
                         let material;
                         if (c) {
                                 name = `material_${c.r},${c.g},${c.b}`;
@@ -129,34 +142,68 @@ export class Stock extends ViewElement {
                                 material = this.assets.materials.find(m => m.name === 'white');
                         }
 
-                        const dot = Actor.Create(this.context, {
-                                actor: {
-                                        parentId: this.anchor.id,
-                                        appearance: {
-                                                meshId: mesh.id,
-                                                materialId: material.id,
-                                        },
-                                        transform: {
-                                                local: {
-                                                        position: {
-                                                                x: px,
-                                                                y: py,
-                                                                z: DOT_OFFSET
-                                                        },
-                                                        scale: {
-                                                                x: 1,
-                                                                y: 1,
-                                                                z: 0.0001
-                                                        },
-                                                }
-                                        },
-                                }
-                        });
+                        let dot;
+                        if (!(this.options as StockOptions).bar) {
+                                dot = Actor.Create(this.context, {
+                                        actor: {
+                                                parentId: this.anchor.id,
+                                                appearance: {
+                                                        meshId: mesh.id,
+                                                        materialId: material.id,
+                                                },
+                                                transform: {
+                                                        local: {
+                                                                position: {
+                                                                        x: px,
+                                                                        y: py,
+                                                                        z: DOT_OFFSET
+                                                                },
+                                                                scale: {
+                                                                        x: 1,
+                                                                        y: 1,
+                                                                        z: 0.0001
+                                                                },
+                                                        }
+                                                },
+                                        }
+                                });
+                        } else {
+                                const s = py + h / 2;
+                                dot = Actor.Create(this.context, {
+                                        actor: {
+                                                parentId: this.anchor.id,
+                                                appearance: {
+                                                        meshId: mesh.id,
+                                                        materialId: material.id,
+                                                },
+                                                transform: {
+                                                        local: {
+                                                                position: {
+                                                                        x: px,
+                                                                        y: py - s / 2,
+                                                                        z: DOT_OFFSET
+                                                                },
+                                                                scale: {
+                                                                        x: 1,
+                                                                        y: s,
+                                                                        z: 0.0001
+                                                                },
+                                                        }
+                                                },
+                                        }
+                                });
+                        }
 
                         this.dots[x] = dot;
                 } else {
                         const dot = this.dots[x];
-                        dot.transform.local.position.copy({ x: px, y: py, z: DOT_OFFSET });
+                        if (!(this.options as StockOptions).bar) {
+                                dot.transform.local.position.copy({ x: px, y: py, z: DOT_OFFSET });
+                        } else {
+                                const s = py + h / 2;
+                                dot.transform.local.position.copy({ x: px, y: py - s / 2, z: DOT_OFFSET });
+                                dot.transform.local.scale.copy({ x: 1, y: s, z: 0.0001 });
+                        }
                         if (c) {
                                 let name = `material_${c.r},${c.g},${c.b}`;
                                 let material = this.assets.materials.find(m => m.name === name);
@@ -253,7 +300,13 @@ export class Stock extends ViewElement {
 
                         const dot = this.dots[x];
                         if (dot) {
-                                dot.transform.local.position.copy({ x: px, y: py, z: DOT_OFFSET });
+                                if (!(this.options as StockOptions).bar) {
+                                        dot.transform.local.position.copy({ x: px, y: py, z: DOT_OFFSET });
+                                } else {
+                                        const s = py + h / 2;
+                                        dot.transform.local.position.copy({ x: px, y: py - s / 2, z: DOT_OFFSET });
+                                        dot.transform.local.scale.copy({ x: 1, y: s, z: 0.0001 });
+                                }
                         }
                         const line = this.lines[x];
                         if (line) {
