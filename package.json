@@ -1,6 +1,6 @@
 {
         "name": "altvr-gui",
-        "version": "1.0.0",
+        "version": "1.0.1",
         "description": "",
         "main": "built/index.js",
         "scripts": {
@@ -10,8 +10,12 @@
                 "test": "node ."
         },
         "keywords": [],
-        "author": "Luminosity",
-        "license": "MIT",
+        "author": "Luminosity a.k.a illuminati360",
+        "license": "GPLv3",
+        "repository": {
+                "type": "git",
+                "url": "https://github.com/the-Free-MRE-Foundation/gui"
+        },
         "devDependencies": {
                 "@typescript-eslint/eslint-plugin": "^5.30.6",
                 "@typescript-eslint/parser": "^5.30.6",
